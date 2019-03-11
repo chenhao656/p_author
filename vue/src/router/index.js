@@ -107,11 +107,11 @@ export const asyncRouterMap = [
     meta: {title: '布控人员管理', icon: 'table'},
     children: [      
       {
-      path: 'control_manager',
+      path: 'personmonitor',
       name: '布控人员管理',
-      //component: _import('user/role'),
+      component: _import('personmonitor/personmonitor'),
       meta: {title: '布控人员管理', icon: 'example'},
-      //menu: 'role'
+      menu: 'personmonitor'
       },      
       {
         path: 'card_alarm',
