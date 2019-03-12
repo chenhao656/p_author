@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-form>
         <el-form-item>
-          <el-button type="primary" icon="plus" @click="showCreate" v-if="hasPerm('article:add')">添加布控人员
+          <el-button type="primary" icon="plus" @click="showCreate" v-if="hasPerm('personmonitor:add')">添加布控人员
           </el-button>
         </el-form-item>
       </el-form>
@@ -15,16 +15,17 @@
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="content" label="人员编号" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" prop="content" label="姓名" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" prop="content" label="性别" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" prop="content" label="身份证号" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" prop="content" label="户籍地" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" prop="content" label="人员类别" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" prop="content" label="案件类别" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="操作" width="200" v-if="hasPerm('article:update')">
+      <el-table-column align="center" prop="id_no" label="人员编号" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" prop="name" label="姓名" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" prop="sex" label="性别" style="width: 30px;"></el-table-column>
+      <el-table-column align="center" prop="id_card" label="身份证号" style="width: 200px;"></el-table-column>
+      <el-table-column align="center" prop="birthplace" label="户籍地" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" prop="type" label="人员类别" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" prop="case_type" label="案件类别" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="操作" width="200" v-if="hasPerm('personmonitor:update')">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
+          <el-button type="primary" icon="edit" @click="showDel(scope.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -38,39 +39,39 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" :model="tempArticle" label-position="left" label-width="100px"
+      <el-form class="small-space" :model="tempPersonmonitor" label-position="left" label-width="100px"
                style='width: 300px; margin-left:50px;'>
         <el-form-item label="姓名">
-          <el-input type="text" v-model="tempArticle.content">
+          <el-input type="text" v-model="tempPersonmonitor.name">
           </el-input>
         </el-form-item>
         <el-form-item label="性别">
-          <el-select v-model="form.sex" placeholder="请选择">
+          <el-select v-model="tempPersonmonitor.sex" placeholder="请选择">
                 <el-option v-for="item in items" :label="item.name" :value="item.id"></el-option>
           </el-select>
           </el-input>
         </el-form-item>
         <el-form-item label="身份证号">
-          <el-input type="text" v-model="tempArticle.content">
+          <el-input type="text" v-model="tempPersonmonitor.id_card">
           </el-input>
         </el-form-item>
         <el-form-item label="户籍地">
-          <el-input type="text" v-model="tempArticle.content">
+          <el-input type="text" v-model="tempPersonmonitor.birthplace">
           </el-input>
         </el-form-item>
         <el-form-item label="人员类别">
-          <el-input type="text" v-model="tempArticle.content">
+          <el-input type="text" v-model="tempPersonmonitor.type">
           </el-input>
         </el-form-item>
         <el-form-item label="案件类别">
-          <el-input type="text" v-model="tempArticle.content">
+          <el-input type="text" v-model="tempPersonmonitor.case_type">
           </el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="success" @click="createArticle">创 建</el-button>
-        <el-button type="primary" v-else @click="updateArticle">修 改</el-button>
+        <el-button v-if="dialogStatus=='create'" type="success" @click="createpersonmonitor">创 建</el-button>
+        <el-button type="primary" v-else @click="updatepersonmonitor">修 改</el-button>
       </div>
     </el-dialog>
   </div>
@@ -93,13 +94,15 @@
           update: '编辑',
           create: '添加布控人员'
         },
-        tempArticle: {
+        tempPersonmonitor: {
           id: "",
-          content: "",
-          cc:""
-        },
-        form:{
-          sex:"男"
+          id_no: "",
+          name:"",
+          sex:"男",
+          id_card:"",
+          birthplace:"",
+          type:"",
+          case_type:""
         },
         items:[{name:"男",id:'1'},{name:"女",id:'2'}]
       }
@@ -110,12 +113,13 @@
     methods: {
       getList() {
         //查询列表
-        if (!this.hasPerm('article:list')) {
+        //权限检查
+        if (!this.hasPerm('personmonitor:list')) {
           return
         }
         this.listLoading = true;
         this.api({
-          url: "/article/listArticle",
+          url: "/personmonitor/listPersonmonitor",
           method: "get",
           params: this.listQuery
         }).then(data => {
@@ -140,39 +144,44 @@
       },
       showCreate() {
         //显示新增对话框
-        this.tempArticle.content = "";
+        //this.tempPersonmonitor.name = "";
         this.dialogStatus = "create"
         this.dialogFormVisible = true
       },
       showUpdate($index) {
         //显示修改对话框
-        this.tempArticle.id = this.list[$index].id;
-        this.tempArticle.content = this.list[$index].content;
-        this.dialogStatus = "update"
-        this.dialogFormVisible = true
+        alert('还没写')
+        // this.tempPersonmonitor.id = this.list[$index].id;
+        // this.tempPersonmonitor.content = this.list[$index].content;
+        // this.dialogStatus = "update"
+        // this.dialogFormVisible = true
       },
-      createArticle() {
-        //保存新文章
+      createpersonmonitor() {
+        //保存
         this.api({
-          url: "/article/addArticle",
+          url: "/personmonitor/addPersonmonitor",
           method: "post",
-          data: this.tempArticle
+          data: this.tempPersonmonitor
         }).then(() => {
           this.getList();
           this.dialogFormVisible = false
         })
       },
-      updateArticle() {
-        //修改文章
+      updatepersonmonitor() {
+        //修改
         this.api({
-          url: "/article/updateArticle",
+          url: "/personmonitor/updatepersonmonitor",
           method: "post",
-          data: this.tempArticle
+          data: this.tempPersonmonitor
         }).then(() => {
           this.getList();
           this.dialogFormVisible = false
         })
       },
+      showDel(){
+        //删除
+        alert('还没写')
+      }
     }
   }
 </script>

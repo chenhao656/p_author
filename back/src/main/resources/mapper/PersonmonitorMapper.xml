@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.PersonmonitorDao">
+
+    <insert id="addPersonmonitor" parameterType="com.alibaba.fastjson.JSONObject">
+        INSERT INTO p_person_control
+            (name,sex,id_card,birthplace,type,case_type)
+        VALUES
+            (#{name},#{sex},#{id_card},#{birthplace},#{type},#{case_type})
+    </insert>
+
+    <select id="countPersonmonitor" resultType="Integer">
+        SELECT count(0)
+        FROM article w
+        WHERE w.delete_status = '1'
+    </select>
+
+    <select id="listPersonmonitor" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT p.id id,p.id_no id_no,p.name name,p.sex sex,
+        p.id_card id_card,p.birthplace birthplace,p.type type,
+        p.case_type case_type FROM p_person_control p
+        ORDER BY ID ASC
+        LIMIT #{offSet}, #{pageRow}
+    </select>
+
+    <update id="updatePersonmonitor" parameterType="com.alibaba.fastjson.JSONObject">
+        UPDATE article
+        SET
+            content = #{content}
+        WHERE id = #{id}
+    </update>
+
+</mapper>
