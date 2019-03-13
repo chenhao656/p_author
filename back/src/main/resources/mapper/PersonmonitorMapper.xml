@@ -12,8 +12,8 @@
 
     <select id="countPersonmonitor" resultType="Integer">
         SELECT count(0)
-        FROM article w
-        WHERE w.delete_status = '1'
+        FROM p_person_control p
+        WHERE p.is_delete = '0'
     </select>
 
     <select id="listPersonmonitor" resultType="com.alibaba.fastjson.JSONObject">
@@ -25,10 +25,7 @@
     </select>
 
     <update id="updatePersonmonitor" parameterType="com.alibaba.fastjson.JSONObject">
-        UPDATE article
-        SET
-            content = #{content}
-        WHERE id = #{id}
+       
     </update>
 
 </mapper>

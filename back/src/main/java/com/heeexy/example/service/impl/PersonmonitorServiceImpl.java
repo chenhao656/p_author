@@ -11,10 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * @author: hxy
- * @date: 2017/10/24 16:07
- */
+
 @Service
 public class PersonmonitorServiceImpl implements PersonmonitorService {
 
@@ -22,7 +19,7 @@ public class PersonmonitorServiceImpl implements PersonmonitorService {
 	private PersonmonitorDao personmonitorDao;
 
 	/**
-	 * 新增文章
+	 * 新增布控人员
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -32,7 +29,7 @@ public class PersonmonitorServiceImpl implements PersonmonitorService {
 	}
 
 	/**
-	 * 文章列表
+	 * 列表
 	 */
 	@Override
 	public JSONObject listPersonmonitor(JSONObject jsonObject) {

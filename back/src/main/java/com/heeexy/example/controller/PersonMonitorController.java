@@ -9,11 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * @author: hxy
- * @description: 文章相关Controller
- * @date: 2017/10/24 16:04
- */
+
 @RestController
 @RequestMapping("/personmonitor")
 public class PersonMonitorController {
@@ -41,7 +37,7 @@ public class PersonMonitorController {
 	}
 
 	/**
-	 * 修改文章
+	 * 删除布控人员
 	 */
 //	@RequiresPermissions("article:update")
 //	@PostMapping("/updateArticle")

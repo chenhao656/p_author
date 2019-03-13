@@ -116,7 +116,7 @@ export const asyncRouterMap = [
       {
         path: 'card_alarm',
         name: '证件比对报警',
-        //component: _import('user/role'),
+        component: _import('monitor/monitor'),
         meta: {title: '证件比对报警', icon: 'example'},
         //menu: 'role'
       },
