@@ -39,10 +39,10 @@ public class PersonMonitorController {
 	/**
 	 * 删除布控人员
 	 */
-//	@RequiresPermissions("article:update")
-//	@PostMapping("/updateArticle")
+//	@RequiresPermissions("personmonitor:update")
+//	@PostMapping("/updatePersonmonitor")
 //	public JSONObject updateArticle(@RequestBody JSONObject requestJson) {
-//		CommonUtil.hasAllRequired(requestJson, "id,content");
+//		CommonUtil.hasAllRequired(requestJson, "id,id_card");
 //		return articleService.updateArticle(requestJson);
 //	}
 }

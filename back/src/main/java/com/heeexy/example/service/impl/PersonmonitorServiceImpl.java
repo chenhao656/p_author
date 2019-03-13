@@ -34,18 +34,9 @@ public class PersonmonitorServiceImpl implements PersonmonitorService {
 	@Override
 	public JSONObject listPersonmonitor(JSONObject jsonObject) {
 		CommonUtil.fillPageParam(jsonObject);
-		//int count = articleDao.countArticle(jsonObject);
 		List<JSONObject> list = personmonitorDao.listPersonmonitor(jsonObject);
 		return CommonUtil.successPage(jsonObject, list, 0);
 	}
 
-	/**
-	 * 更新文章
-	 */
-//	@Override
-//	@Transactional(rollbackFor = Exception.class)
-//	public JSONObject updateArticle(JSONObject jsonObject) {
-//		articleDao.updateArticle(jsonObject);
-//		return CommonUtil.successJson();
-//	}
+
 }

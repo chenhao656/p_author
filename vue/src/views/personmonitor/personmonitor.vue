@@ -25,7 +25,7 @@
       <el-table-column align="center" label="操作" width="200" v-if="hasPerm('personmonitor:update')">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
-          <el-button type="primary" icon="edit" @click="showDel(scope.$index)">删除</el-button>
+          <el-button type="danger" icon="edit" @click="showDel(scope.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

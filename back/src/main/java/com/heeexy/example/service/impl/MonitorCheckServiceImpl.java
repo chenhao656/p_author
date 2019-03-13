@@ -23,7 +23,7 @@ public class MonitorCheckServiceImpl implements MonitorCheckService{
 	public JSONObject listMonitorCheck(JSONObject jsonObject) {
 		// TODO Auto-generated method stub
 		CommonUtil.fillPageParam(jsonObject);
-		//int count = articleDao.countArticle(jsonObject);
+
 		List<JSONObject> list = monitorCheckDao.listMonitorCheck(jsonObject);
 		return CommonUtil.successPage(jsonObject, list, 0);
 	}

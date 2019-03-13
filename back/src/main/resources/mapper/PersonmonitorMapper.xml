@@ -21,7 +21,6 @@
         p.id_card id_card,p.birthplace birthplace,p.type type,
         p.case_type case_type FROM p_person_control p
         ORDER BY ID ASC
-        LIMIT #{offSet}, #{pageRow}
     </select>
 
     <update id="updatePersonmonitor" parameterType="com.alibaba.fastjson.JSONObject">

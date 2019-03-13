@@ -36,7 +36,7 @@
               
             )
 
-            //alert('监控人员'+this.list[0].name+'进入') 
+            alert('监控人员'+this.list[0].name+'进入') 
         }
         })
         //this.value ++;
