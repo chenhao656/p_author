@@ -5,11 +5,14 @@
         <el-form-item>
           <el-button type="primary" icon="plus" @click="showCreate" v-if="hasPerm('personmonitor:add')">添加布控人员
           </el-button>
+          <el-tag>批量添加</el-tag> <input id="upload" type="file" @change="importfxx(this)"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+          <el-button type="danger" icon="edit" @click="showDel(id_cardlist)">删除</el-button>
         </el-form-item>
       </el-form>
     </div>
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
-              highlight-current-row>
+              highlight-current-row  @selection-change="handleSelectionChange">
+    <el-table-column type="selection" width="55"s></el-table-column>
       <el-table-column align="center" label="序号" width="80">
         <template slot-scope="scope">
           <span v-text="getIndex(scope.$index)"> </span>
@@ -25,7 +28,7 @@
       <el-table-column align="center" label="操作" width="200" v-if="hasPerm('personmonitor:update')">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
-          <el-button type="danger" icon="edit" @click="showDel(scope.$index)">删除</el-button>
+          <!-- <el-button type="danger" icon="edit" @click="showDel(scope.$index)">删除</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -88,6 +91,7 @@
           pageRow: 50,//每页条数
           name: ''
         },
+        id_cardlist:[],//选中的身份证号数据
         dialogStatus: 'create',
         dialogFormVisible: false,
         textMap: {
@@ -178,9 +182,30 @@
           this.dialogFormVisible = false
         })
       },
-      showDel(){
+      showDel(list){
         //删除
-        alert('还没写')
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+      },
+      handleSelectionChange(val){
+        console.log(val);
+        for(var i=0;i<val.length;i++){
+          this.id_cardlist=val;
+          console.log(this.id_cardlist[i].id_card);
+        }
       }
     }
   }

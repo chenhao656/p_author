@@ -176,6 +176,22 @@ export const asyncRouterMap = [
       //menu: 'role'
       }
     ]
+  },  
+  {
+    path: '/test',
+    component: Layout,
+    redirect: '/test/',
+    name: '',
+    meta: {title: '测试页面', icon: 'table'},
+    children: [      
+      {
+      path: 'test',
+      name: '测试页面',
+      component: _import('test/test'),
+      meta: {title: '测试页面', icon: 'example'},
+      //menu: 'role'
+      }
+    ]
   },
   {path: '*', redirect: '/404', hidden: true}
 ]

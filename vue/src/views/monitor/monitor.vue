@@ -26,16 +26,16 @@
           this.listLoading = false;
           this.list = data.list;
           this.totalCount = data.totalCount;
-          if(this.list!=null){
+          if(this.list==false){
             //console.log(this.list[0].name)
+
+        }else{
             var voice=new Audio('http://www.xmf119.cn/static/admin/sounds/notify.wav')
-            //voice.play()
+            voice.play()
             voice.addEventListener('end', function () { 
                 alert('监控人员'+this.list[0].name+'进入') 
-             }
-              
+             }              
             )
-
             alert('监控人员'+this.list[0].name+'进入') 
         }
         })
