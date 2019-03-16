@@ -33,6 +33,7 @@
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
+      <el-table-column align="center" prop="person_id" label="隐藏ID" v-if="false"></el-table-column>
       <el-table-column align="center" prop="id_no" label="人员编号" style="width: 160px;"></el-table-column>
       <el-table-column align="center" prop="name" label="姓名" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="sex" label="性别" style="width: 30px;"></el-table-column>
@@ -235,6 +236,8 @@ import XLSX from 'xlsx'
       },
       handleSelectionChange(val){
         console.log(val);
+        console.log(val[0].hasOwnProperty("姓名"));
+        console.log(val[0].hasOwnProperty("name"));
         for(var i=0;i<val.length;i++){
           this.id_cardlist=val;
           console.log(this.id_cardlist[i].id_card);
@@ -243,19 +246,80 @@ import XLSX from 'xlsx'
       readExcel(file) {
         const fileReader = new FileReader();
         fileReader.onload = (ev) => {
-       try {
+        try {
         const data = ev.target.result;
         const workbook = XLSX.read(data, {
           type: 'binary'
         });
         for (let sheet in workbook.Sheets) {
           const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
-          
+          console.log(sheetArray[0].姓名);
+          console.log(sheetArray);
+          console.log(sheetArray[0].hasOwnProperty('姓名'));
+          if(sheetArray.length>0){
+            if(!sheetArray[0].hasOwnProperty('姓名')){
+            this.$message({
+            type: 'info',
+            message: '表头格式有误，找不到姓名列!'
+            });    
+            }else if(!sheetArray[0].hasOwnProperty("人员编号")){
+              this.$message({
+              type: 'info',
+              message: '表头格式有误，找不到人员编号列!'
+              });    
+            }else if(!sheetArray[0].hasOwnProperty("身份证号")){
+              this.$message({
+              type: 'info',
+              message: '表头格式有误，找不到身份证号列!'
+              });    
+            }else if(!sheetArray[0].hasOwnProperty("性别")){
+              this.$message({
+              type: 'info',
+              message: '表头格式有误，找不到性别列!'
+              });    
+            }else if(!sheetArray[0].hasOwnProperty("户籍地")){
+              this.$message({
+              type: 'info',
+              message: '表头格式有误，找不到户籍地列!'
+              });                
+            }else if(!sheetArray[0].hasOwnProperty("人员类别")){
+              this.$message({
+              type: 'info',
+              message: '表头格式有误，找不到人员类别列!'
+              });               
+            }else if(!sheetArray[0].hasOwnProperty("案件类别")){
+              this.$message({
+              type: 'info',
+              message: '表头格式有误，找不到案件类别列!'
+              });                      
+            }else{             
+                console.log(1213);
+                for(var k=0;k<sheetArray.length;k++){
+                    console.log(this.tempPersonmonitor.id_card);
+                    this.tempPersonmonitor.id_no=sheetArray[k].人员编号;
+                    this.tempPersonmonitor.name=sheetArray[k].姓名;
+                    this.tempPersonmonitor.sex=sheetArray[k].性别;
+                    this.tempPersonmonitor.id_card=sheetArray[k].身份证号;
+                    this.tempPersonmonitor.type=sheetArray[k].人员类别;
+                    this.tempPersonmonitor.case_type=sheetArray[k].案件类别;
+                    this.tempPersonmonitor.birthplace=sheetArray[k].户籍地;
+                    this.api({
+                        url: "/personmonitor/addPersonmonitor",
+                        method: "post",
+                        data: this.tempPersonmonitor
+                        }).then(() => {
+                            this.getList();
+                      })
+                    
+                    }  
+                }
+
+            }
          }
-        } catch (e) {
-        this.$message.warning('文件类型不正确！');
-        return false;
-        }
+         } catch (e) {
+         this.$message.warning('文件类型不正确！');
+         return false;
+         }
       };
         fileReader.readAsBinaryString(file.raw);
       }
