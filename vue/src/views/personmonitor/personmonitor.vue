@@ -3,10 +3,25 @@
     <div class="filter-container">
       <el-form>
         <el-form-item>
-          <el-button type="primary" icon="plus" @click="showCreate" v-if="hasPerm('personmonitor:add')">添加布控人员
+          <el-input v-model="this.searchcondition" placeholder="身份证号或姓名" style="width: 200px;" size="small"></el-input><el-button type="primary" icon="el-icon-search" size="small">搜索</el-button>
+          <el-button type="primary" icon="plus" @click="showCreate" v-if="hasPerm('personmonitor:add')" size="small">添加布控人员
           </el-button>
-          <el-tag>批量添加</el-tag> <input id="upload" type="file" @change="importfxx(this)"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
-          <el-button type="danger" icon="edit" @click="showDel(id_cardlist)">删除</el-button>
+          <el-button type="danger" icon="edit" @click="showDel(id_cardlist)" size="small">删除</el-button>
+          <el-upload
+              ref="upload"
+              action="/wm/upload/"
+              :show-file-list="false"
+              :on-change="readExcel"
+              :auto-upload="false">
+            <el-button
+              slot="trigger"
+              icon="el-icon-upload"
+              size="small"
+              type="primary">
+              批量上传
+            </el-button>
+          </el-upload>          
+
         </el-form-item>
       </el-form>
     </div>
@@ -18,10 +33,10 @@
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="id_no" label="人员编号" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" prop="id_no" label="人员编号" style="width: 160px;"></el-table-column>
       <el-table-column align="center" prop="name" label="姓名" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="sex" label="性别" style="width: 30px;"></el-table-column>
-      <el-table-column align="center" prop="id_card" label="身份证号" style="width: 200px;"></el-table-column>
+      <el-table-column align="center" prop="id_card" label="身份证号" width="200"></el-table-column>
       <el-table-column align="center" prop="birthplace" label="户籍地" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="type" label="人员类别" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="case_type" label="案件类别" style="width: 60px;"></el-table-column>
@@ -74,12 +89,14 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button v-if="dialogStatus=='create'" type="success" @click="createpersonmonitor">创 建</el-button>
-        <el-button type="primary" v-else @click="updatepersonmonitor">修 改</el-button>
+        <el-button type="primary" v-else @click="updatepersonmonitor">保 存</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
+import XLSX from 'xlsx'
+
   export default {
     data() {
       return {
@@ -108,7 +125,8 @@
           type:"",
           case_type:""
         },
-        items:[{name:"男",id:'1'},{name:"女",id:'2'}]
+        items:[{name:"男",id:'1'},{name:"女",id:'2'}],
+        searchcondition:""
       }
     },
     created() {
@@ -132,6 +150,9 @@
           this.totalCount = data.totalCount;
         })
       },
+      hideRow(val){
+        this.show=false
+      },
       handleSizeChange(val) {
         //改变每页数量
         this.listQuery.pageRow = val
@@ -154,11 +175,16 @@
       },
       showUpdate($index) {
         //显示修改对话框
-        alert('还没写')
-        // this.tempPersonmonitor.id = this.list[$index].id;
-        // this.tempPersonmonitor.content = this.list[$index].content;
-        // this.dialogStatus = "update"
-        // this.dialogFormVisible = true
+        //alert('还没写')
+        this.tempPersonmonitor.id = this.list[$index].id;
+        this.tempPersonmonitor.id_card = this.list[$index].id_card;
+        this.tempPersonmonitor.sex = this.list[$index].sex;
+        this.tempPersonmonitor.birthplace = this.list[$index].birthplace;
+        this.tempPersonmonitor.type = this.list[$index].type;
+        this.tempPersonmonitor.case_type = this.list[$index].case_type;
+        this.tempPersonmonitor.name = this.list[$index].name;
+        this.dialogStatus = "update"
+        this.dialogFormVisible = true
       },
       createpersonmonitor() {
         //保存
@@ -184,21 +210,28 @@
       },
       showDel(list){
         //删除
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        if (this.id_cardlist.length==0){
+            this.$message({
+            type: 'info',
+            message: '请选中需要删除的人员!'
+            });     
+        }else{
+          this.$confirm('确定删除选中人员？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
+            this.$message({
             type: 'success',
             message: '删除成功!'
-          });
+            });            
         }).catch(() => {
           this.$message({
             type: 'info',
             message: '已取消删除'
           });          
         });
+        }        
       },
       handleSelectionChange(val){
         console.log(val);
@@ -206,6 +239,25 @@
           this.id_cardlist=val;
           console.log(this.id_cardlist[i].id_card);
         }
+      },
+      readExcel(file) {
+        const fileReader = new FileReader();
+        fileReader.onload = (ev) => {
+       try {
+        const data = ev.target.result;
+        const workbook = XLSX.read(data, {
+          type: 'binary'
+        });
+        for (let sheet in workbook.Sheets) {
+          const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+          
+         }
+        } catch (e) {
+        this.$message.warning('文件类型不正确！');
+        return false;
+        }
+      };
+        fileReader.readAsBinaryString(file.raw);
       }
     }
   }

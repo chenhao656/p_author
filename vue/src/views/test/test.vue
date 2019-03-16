@@ -1,11 +1,20 @@
 <template>
   <div class="app-container">
       <h1>页面样式还没定，监控黑名单人员进入</h1>
-      <!-- <el-upload ref="upload" action="/wm/upload/":show-file-list="false":auto-upload="false"> -->
-  <el-button slot="trigger" icon="el-icon-upload" size="middle" type="primary" @click="importfxx(this)">
-    批量导入布控人员
+<el-upload
+    ref="upload"
+    action="/wm/upload/"
+    :show-file-list="false"
+    :on-change="readExcel"
+    :auto-upload="false">
+  <el-button
+      slot="trigger"
+      icon="el-icon-upload"
+      size="small"
+      type="primary">
+    上传文件
   </el-button>
-</el-upload>
+  </el-upload>
      <el-tag>批量导入</el-tag> <input id="upload" type="file" @change="importfxx(this)"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
 <upload-excel-component :on-success="handleSuccess" :before-upload="beforeUpload"/>
     <el-table :data="tableData" border highlight-current-row style="width: 100%;margin-top:20px;">
@@ -15,6 +24,7 @@
 </template>
 <script>
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
+import XLSX from 'xlsx'
 
 export default {
   name: 'UploadExcel',
@@ -31,26 +41,25 @@ export default {
         // this.readExcel(e);
         //  })
     },
-    readExcel(e) {
-         const files = e.target.files;
-         const fileReader = new FileReader();
-        fileReader.onload = (ev) => {
-            try {
-         const data = ev.target.result;
-         const workbook = XLSX.read(data, {
+    readExcel(file) {
+    const fileReader = new FileReader();
+    fileReader.onload = (ev) => {
+      try {
+        const data = ev.target.result;
+        const workbook = XLSX.read(data, {
           type: 'binary'
-            });
-      for (let sheet in workbook.Sheets) {
-        const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);  //获得以第一列为键名的sheet数组对象 
-     
+        });
+        for (let sheet in workbook.Sheets) {
+          const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+          console.log(sheetArray);
+         }
+      } catch (e) {
+        this.$message.warning('文件类型不正确！');
+        return false;
       }
-    } catch (e) {
-      this.$message.warning('文件类型不正确！');
-      return false;
-    }
-  };
-  fileReader.readAsBinaryString(files[0]);
-},
+    };
+    fileReader.readAsBinaryString(file.raw);
+  },
  // 文件读取前执行
     beforeUpload(file) {
       // 取文件大小，限制文件大小超过1mb
