@@ -1,5 +1,6 @@
 package com.heeexy.example.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PersonmonitorService;
 import com.heeexy.example.util.CommonUtil;
@@ -40,9 +41,9 @@ public class PersonMonitorController {
 	 * 批量导入布控人员
 	 */	
 	@PostMapping("/bulkaddPersonmonitor")
-	public JSONObject bulkaddPersonmonitor(@RequestBody JSONObject requestJson) {
+	public JSONObject bulkaddPersonmonitor(@RequestBody JSONArray requestJson) {
 		//CommonUtil.hasAllRequired(requestJson, "content");
-		return personmonitorService.addPersonmonitor(requestJson);
+		return personmonitorService.bulkimportPersonmonitor(requestJson);
 	}
 	
 	/**

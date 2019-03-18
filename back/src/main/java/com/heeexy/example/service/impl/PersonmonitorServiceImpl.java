@@ -1,5 +1,6 @@
 package com.heeexy.example.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.PersonmonitorDao;
 import com.heeexy.example.service.PersonmonitorService;
@@ -44,9 +45,12 @@ public class PersonmonitorServiceImpl implements PersonmonitorService {
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public JSONObject bulkimportPersonmonitor(JSONObject jsonObject) {
+	public JSONObject bulkimportPersonmonitor(JSONArray requestJson) {
 		// TODO Auto-generated method stub
-	    System.out.print(jsonObject);
+		for(int i=0;i<requestJson.size();i++) {
+			personmonitorDao.addPersonmonitor(requestJson.getJSONObject(i));
+		}
+		
 		return CommonUtil.successJson();
 	}
 

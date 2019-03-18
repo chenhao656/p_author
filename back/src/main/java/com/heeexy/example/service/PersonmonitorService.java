@@ -1,5 +1,6 @@
 package com.heeexy.example.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 /**
@@ -20,5 +21,5 @@ public interface PersonmonitorService {
 	/**
 	 * 批量导入
 	 */
-	JSONObject bulkimportPersonmonitor(JSONObject jsonObject);
+	JSONObject bulkimportPersonmonitor(JSONArray requestJson);
 }

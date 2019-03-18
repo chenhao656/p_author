@@ -215,7 +215,7 @@ import XLSX from 'xlsx'
             this.$message({
             type: 'info',
             message: '请选中需要删除的人员!'
-            });     
+            });
         }else{
           this.$confirm('确定删除选中人员？', '提示', {
           confirmButtonText: '确定',
@@ -225,14 +225,14 @@ import XLSX from 'xlsx'
             this.$message({
             type: 'success',
             message: '删除成功!'
-            });            
+            });
         }).catch(() => {
           this.$message({
             type: 'info',
             message: '已取消删除'
-          });          
+          });
         });
-        }        
+        }
       },
       handleSelectionChange(val){
         console.log(val);
@@ -246,83 +246,87 @@ import XLSX from 'xlsx'
       readExcel(file) {
         const fileReader = new FileReader();
         fileReader.onload = (ev) => {
-        try {
+       try {
         const data = ev.target.result;
         const workbook = XLSX.read(data, {
           type: 'binary'
         });
         for (let sheet in workbook.Sheets) {
           const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
-          console.log(sheetArray[0].姓名);
           console.log(sheetArray);
-          console.log(sheetArray[0].hasOwnProperty('姓名'));
           if(sheetArray.length>0){
             if(!sheetArray[0].hasOwnProperty('姓名')){
             this.$message({
             type: 'info',
             message: '表头格式有误，找不到姓名列!'
              });
-              return false;    
+              return false;
             }else if(!sheetArray[0].hasOwnProperty("人员编号")){
               this.$message({
               type: 'info',
               message: '表头格式有误，找不到人员编号列!'
               });
-              return false;    
+              return false;
             }else if(!sheetArray[0].hasOwnProperty("身份证号")){
               this.$message({
               type: 'info',
               message: '表头格式有误，找不到身份证号列!'
               });
-              return false;    
+              return false;
             }else if(!sheetArray[0].hasOwnProperty("性别")){
               this.$message({
               type: 'info',
               message: '表头格式有误，找不到性别列!'
               });
-              return false;    
+              return false;
             }else if(!sheetArray[0].hasOwnProperty("户籍地")){
               this.$message({
               type: 'info',
               message: '表头格式有误，找不到户籍地列!'
               });
-              return false;                
+              return false;
             }else if(!sheetArray[0].hasOwnProperty("人员类别")){
               this.$message({
               type: 'info',
               message: '表头格式有误，找不到人员类别列!'
               });
-              return false;               
+              return false;
             }else if(!sheetArray[0].hasOwnProperty("案件类别")){
               this.$message({
               type: 'info',
               message: '表头格式有误，找不到案件类别列!'
-              }); 
-              return false;                     
-            }             
-            console.log(1213);
-            // for(var k=0;k<sheetArray.length;k++){
-            //     console.log(this.tempPersonmonitor.id_card);
-            //     this.tempPersonmonitor.id_no=sheetArray[k].人员编号;
-            //     this.tempPersonmonitor.name=sheetArray[k].姓名;
-            //     this.tempPersonmonitor.sex=sheetArray[k].性别;
-            //     this.tempPersonmonitor.id_card=sheetArray[k].身份证号;
-            //     this.tempPersonmonitor.type=sheetArray[k].人员类别;
-            //     this.tempPersonmonitor.case_type=sheetArray[k].案件类别;
-            //     this.tempPersonmonitor.birthplace=sheetArray[k].户籍地;
-                
-            //     }  
+              });
+              return false;
+            }
+            var importJson = [];
+            var tempJson = {};
+            for (var i in sheetArray) {
+               // 清空json对象
+               tempJson = {};
+               // 添加json元素(key-goods)并赋值(value)
+               tempJson['name'] = sheetArray[i].姓名;
+               // 设置key=value所对应的值并添加到tempJson对象中
+               tempJson['id_no'] = sheetArray[i].人员编号;
+               tempJson['sex'] = sheetArray[i].性别;
+               tempJson['id_card'] = sheetArray[i].身份证号;
+               tempJson['type'] = sheetArray[i].人员类别;
+               tempJson['case_type'] = sheetArray[i].案件类别;
+               tempJson['birthplace'] = sheetArray[i].户籍地;
+               importJson[i] = tempJson;
+              }
+
                this.api({
                     url: "/personmonitor/bulkaddPersonmonitor",
                     method: "post",
-                    data: sheetArray
+                    data: importJson
                     }).then(() => {
                         this.getList();
                   })
 
             }
          }
-         } catch (e) {
+         }
+       catch (e) {
          this.$message.warning('文件类型不正确！');
          return false;
          }

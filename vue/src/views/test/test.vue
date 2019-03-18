@@ -1,20 +1,77 @@
 <template>
   <div class="app-container">
+<<<<<<< HEAD
+    <h1>测试页面</h1>
+    <el-alert title="警告提示的文案"
+              type="warning">
+    </el-alert>
+    <el-alert title="成功提示的文案"
+              type="success">
+    </el-alert>
+    <el-alert title="消息提示的文案"
+              type="info">
+    </el-alert>
+    <el-alert title="警告提示的文案"
+              type="warning">
+    </el-alert>
+    <el-alert title="错误提示的文案"
+              type="error">
+    </el-alert>
+    <el-alert title="成功提示的文案"
+              type="warning"
+              description="文字说明文字说明文字说明文字说明文字说明文字说明"
+              show-icon>
+    </el-alert>
+    <el-button type="text" @click="open2">点击打开 Message Box</el-button>
+  </div>
+
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        timer: '',
+        value: 0
+      };
+    },
+    methods: {
+      getBlackList() {
+        console.log(11111111111111)
+
+      }
+    },
+    mounted() {
+      this.timer = setInterval(this.getBlackList, 5000);
+    },
+    beforeDestroy() {
+      clearInterval(this.timer);
+    },
+    open2() {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    }
+  }
+</script>
+=======
       <h1>页面样式还没定，监控黑名单人员进入</h1>
-<el-upload
-    ref="upload"
-    action="/wm/upload/"
-    :show-file-list="false"
-    :on-change="readExcel"
-    :auto-upload="false">
-  <el-button
-      slot="trigger"
-      icon="el-icon-upload"
-      size="small"
-      type="primary">
-    上传文件
+      <!-- <el-upload ref="upload" action="/wm/upload/":show-file-list="false":auto-upload="false"> -->
+  <el-button slot="trigger" icon="el-icon-upload" size="middle" type="primary" @click="importfxx(this)">
+    批量导入布控人员
   </el-button>
-  </el-upload>
+</el-upload>
      <el-tag>批量导入</el-tag> <input id="upload" type="file" @change="importfxx(this)"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
 <upload-excel-component :on-success="handleSuccess" :before-upload="beforeUpload"/>
     <el-table :data="tableData" border highlight-current-row style="width: 100%;margin-top:20px;">
@@ -24,7 +81,6 @@
 </template>
 <script>
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
-import XLSX from 'xlsx'
 
 export default {
   name: 'UploadExcel',
@@ -41,25 +97,26 @@ export default {
         // this.readExcel(e);
         //  })
     },
-    readExcel(file) {
-    const fileReader = new FileReader();
-    fileReader.onload = (ev) => {
-      try {
-        const data = ev.target.result;
-        const workbook = XLSX.read(data, {
+    readExcel(e) {
+         const files = e.target.files;
+         const fileReader = new FileReader();
+        fileReader.onload = (ev) => {
+            try {
+         const data = ev.target.result;
+         const workbook = XLSX.read(data, {
           type: 'binary'
-        });
-        for (let sheet in workbook.Sheets) {
-          const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
-          console.log(sheetArray);
-         }
-      } catch (e) {
-        this.$message.warning('文件类型不正确！');
-        return false;
+            });
+      for (let sheet in workbook.Sheets) {
+        const sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);  //获得以第一列为键名的sheet数组对象 
+     
       }
-    };
-    fileReader.readAsBinaryString(file.raw);
-  },
+    } catch (e) {
+      this.$message.warning('文件类型不正确！');
+      return false;
+    }
+  };
+  fileReader.readAsBinaryString(files[0]);
+},
  // 文件读取前执行
     beforeUpload(file) {
       // 取文件大小，限制文件大小超过1mb
@@ -128,3 +185,4 @@ export default {
 }
 
 </script>
+>>>>>>> 62644bb1d4c09ac04c332bd38aca7baf3c1ce8e7
