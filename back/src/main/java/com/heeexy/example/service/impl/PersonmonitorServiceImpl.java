@@ -4,11 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.PersonmonitorDao;
 import com.heeexy.example.service.PersonmonitorService;
 import com.heeexy.example.util.CommonUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 //import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 
@@ -36,6 +36,18 @@ public class PersonmonitorServiceImpl implements PersonmonitorService {
 		CommonUtil.fillPageParam(jsonObject);
 		List<JSONObject> list = personmonitorDao.listPersonmonitor(jsonObject);
 		return CommonUtil.successPage(jsonObject, list, 0);
+	}
+
+	
+	/**
+	 * 批量导入布控人员
+	 */
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public JSONObject bulkimportPersonmonitor(JSONObject jsonObject) {
+		// TODO Auto-generated method stub
+	    System.out.print(jsonObject);
+		return CommonUtil.successJson();
 	}
 
 

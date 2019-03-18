@@ -261,58 +261,64 @@ import XLSX from 'xlsx'
             this.$message({
             type: 'info',
             message: '表头格式有误，找不到姓名列!'
-            });    
+             });
+              return false;    
             }else if(!sheetArray[0].hasOwnProperty("人员编号")){
               this.$message({
               type: 'info',
               message: '表头格式有误，找不到人员编号列!'
-              });    
+              });
+              return false;    
             }else if(!sheetArray[0].hasOwnProperty("身份证号")){
               this.$message({
               type: 'info',
               message: '表头格式有误，找不到身份证号列!'
-              });    
+              });
+              return false;    
             }else if(!sheetArray[0].hasOwnProperty("性别")){
               this.$message({
               type: 'info',
               message: '表头格式有误，找不到性别列!'
-              });    
+              });
+              return false;    
             }else if(!sheetArray[0].hasOwnProperty("户籍地")){
               this.$message({
               type: 'info',
               message: '表头格式有误，找不到户籍地列!'
-              });                
+              });
+              return false;                
             }else if(!sheetArray[0].hasOwnProperty("人员类别")){
               this.$message({
               type: 'info',
               message: '表头格式有误，找不到人员类别列!'
-              });               
+              });
+              return false;               
             }else if(!sheetArray[0].hasOwnProperty("案件类别")){
               this.$message({
               type: 'info',
               message: '表头格式有误，找不到案件类别列!'
-              });                      
-            }else{             
-                console.log(1213);
-                for(var k=0;k<sheetArray.length;k++){
-                    console.log(this.tempPersonmonitor.id_card);
-                    this.tempPersonmonitor.id_no=sheetArray[k].人员编号;
-                    this.tempPersonmonitor.name=sheetArray[k].姓名;
-                    this.tempPersonmonitor.sex=sheetArray[k].性别;
-                    this.tempPersonmonitor.id_card=sheetArray[k].身份证号;
-                    this.tempPersonmonitor.type=sheetArray[k].人员类别;
-                    this.tempPersonmonitor.case_type=sheetArray[k].案件类别;
-                    this.tempPersonmonitor.birthplace=sheetArray[k].户籍地;
-                    this.api({
-                        url: "/personmonitor/addPersonmonitor",
-                        method: "post",
-                        data: this.tempPersonmonitor
-                        }).then(() => {
-                            this.getList();
-                      })
-                    
-                    }  
-                }
+              }); 
+              return false;                     
+            }             
+            console.log(1213);
+            // for(var k=0;k<sheetArray.length;k++){
+            //     console.log(this.tempPersonmonitor.id_card);
+            //     this.tempPersonmonitor.id_no=sheetArray[k].人员编号;
+            //     this.tempPersonmonitor.name=sheetArray[k].姓名;
+            //     this.tempPersonmonitor.sex=sheetArray[k].性别;
+            //     this.tempPersonmonitor.id_card=sheetArray[k].身份证号;
+            //     this.tempPersonmonitor.type=sheetArray[k].人员类别;
+            //     this.tempPersonmonitor.case_type=sheetArray[k].案件类别;
+            //     this.tempPersonmonitor.birthplace=sheetArray[k].户籍地;
+                
+            //     }  
+               this.api({
+                    url: "/personmonitor/bulkaddPersonmonitor",
+                    method: "post",
+                    data: sheetArray
+                    }).then(() => {
+                        this.getList();
+                  })
 
             }
          }

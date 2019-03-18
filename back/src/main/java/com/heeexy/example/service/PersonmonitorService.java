@@ -18,7 +18,7 @@ public interface PersonmonitorService {
 	JSONObject listPersonmonitor(JSONObject jsonObject);
 
 	/**
-	 * 更新文章
+	 * 批量导入
 	 */
-//	JSONObject updateArticle(JSONObject jsonObject);
+	JSONObject bulkimportPersonmonitor(JSONObject jsonObject);
 }

@@ -37,6 +37,15 @@ public class PersonMonitorController {
 	}
 
 	/**
+	 * 批量导入布控人员
+	 */	
+	@PostMapping("/bulkaddPersonmonitor")
+	public JSONObject bulkaddPersonmonitor(@RequestBody JSONObject requestJson) {
+		//CommonUtil.hasAllRequired(requestJson, "content");
+		return personmonitorService.addPersonmonitor(requestJson);
+	}
+	
+	/**
 	 * 删除布控人员
 	 */
 //	@RequiresPermissions("personmonitor:update")
