@@ -5,26 +5,43 @@
 
     <insert id="addPersonmonitor" parameterType="com.alibaba.fastjson.JSONObject">
         INSERT INTO p_person_control
-            (name,sex,id_card,birthplace,type,case_type)
+            (id_no,name,sex,id_card,birthplace,type,case_type)
         VALUES
-            (#{name},#{sex},#{id_card},#{birthplace},#{type},#{case_type})
+            (#{id_no},#{name},#{sex},#{id_card},#{birthplace},#{type},#{case_type})
     </insert>
 
     <select id="countPersonmonitor" resultType="Integer">
-        SELECT count(0)
+        SELECT count(1)
         FROM p_person_control p
-        WHERE p.is_delete = '0'
+        WHERE p.is_delete = '0' and id_card=#{id_card}
     </select>
 
     <select id="listPersonmonitor" resultType="com.alibaba.fastjson.JSONObject">
         SELECT p.id id,p.id_no id_no,p.name name,p.sex sex,
         p.id_card id_card,p.birthplace birthplace,p.type type,
-        p.case_type case_type FROM p_person_control p
+        p.case_type case_type FROM p_person_control p where p.is_delete=0
         ORDER BY ID ASC
     </select>
 
     <update id="updatePersonmonitor" parameterType="com.alibaba.fastjson.JSONObject">
-       
+         update p_person_control p set p.name=#{name},p.id_no=#{id_no},p.sex=#{sex},p.birthplace=#{birthplace},
+         p.type=#{type},p.case_type=#{case_type} where p.id_card=#{id_card}
     </update>
 
+
+    <update id="updatePersonmonitorbyid" parameterType="com.alibaba.fastjson.JSONObject">
+         update p_person_control p set p.name=#{name},p.id_no=#{id_no},p.sex=#{sex},p.birthplace=#{birthplace},p.id_card=#{id_card}
+         p.type=#{type},p.case_type=#{case_type} where p.id=#{id}
+    </update>
+    
+     <update id="deletePersonmonitor" parameterType="com.alibaba.fastjson.JSONObject">
+         update p_person_control p set p.is_delete=1 where p.id=#{id}
+    </update>   
+    
+    <select id="queryPersonmonitor" resultType="com.alibaba.fastjson.JSONObject" parameterType="java.lang.String">
+        SELECT p.id id,p.id_no id_no,p.name name,p.sex sex,
+        p.id_card id_card,p.birthplace birthplace,p.type type,
+        p.case_type case_type FROM p_person_control p where p.is_delete=0 and id_card=#{param} or name=#{param}
+        ORDER BY ID ASC
+    </select>
 </mapper>

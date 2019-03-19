@@ -3,10 +3,10 @@
     <div class="filter-container">
       <el-form>
         <el-form-item>
-          <el-input v-model="this.searchcondition" placeholder="身份证号或姓名" style="width: 200px;" size="small"></el-input><el-button type="primary" icon="el-icon-search" size="small">搜索</el-button>
+          <el-input  v_model="this.searchcondition.param"  placeholder="身份证号或姓名" style="width: 200px;" size="small"  @change="conditionChange"></el-input><el-button type="primary" icon="el-icon-search" size="small" @click="search">搜索</el-button>
           <el-button type="primary" icon="plus" @click="showCreate" v-if="hasPerm('personmonitor:add')" size="small">添加布控人员
           </el-button>
-          <el-button type="danger" icon="edit" @click="showDel(id_cardlist)" size="small">删除</el-button>
+          <el-button type="danger" icon="edit" @click="showDel(deletelist)" size="small">删除</el-button>
           <el-upload
               ref="upload"
               action="/wm/upload/"
@@ -33,7 +33,7 @@
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="person_id" label="隐藏ID" v-if="false"></el-table-column>
+      <el-table-column align="center" prop="id" label="隐藏ID" v-if="false"></el-table-column>
       <el-table-column align="center" prop="id_no" label="人员编号" style="width: 160px;"></el-table-column>
       <el-table-column align="center" prop="name" label="姓名" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="sex" label="性别" style="width: 30px;"></el-table-column>
@@ -60,15 +60,18 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form class="small-space" :model="tempPersonmonitor" label-position="left" label-width="100px"
                style='width: 300px; margin-left:50px;'>
+        <el-form-item label="人员编号">
+          <el-input type="text" v-model="tempPersonmonitor.id_no">
+         </el-input>
+        </el-form-item>
         <el-form-item label="姓名">
           <el-input type="text" v-model="tempPersonmonitor.name">
           </el-input>
         </el-form-item>
         <el-form-item label="性别">
           <el-select v-model="tempPersonmonitor.sex" placeholder="请选择">
-                <el-option v-for="item in items" :label="item.name" :value="item.id"></el-option>
+            <el-option v-for="item in items" :label="item.name" :value="item.id"></el-option>
           </el-select>
-          </el-input>
         </el-form-item>
         <el-form-item label="身份证号">
           <el-input type="text" v-model="tempPersonmonitor.id_card">
@@ -109,7 +112,7 @@ import XLSX from 'xlsx'
           pageRow: 50,//每页条数
           name: ''
         },
-        id_cardlist:[],//选中的身份证号数据
+        deletelist:[],//选中的身份证号数据
         dialogStatus: 'create',
         dialogFormVisible: false,
         textMap: {
@@ -127,7 +130,9 @@ import XLSX from 'xlsx'
           case_type:""
         },
         items:[{name:"男",id:'1'},{name:"女",id:'2'}],
-        searchcondition:""
+        searchcondition:{
+          param:""
+        }
       }
     },
     created() {
@@ -145,6 +150,21 @@ import XLSX from 'xlsx'
           url: "/personmonitor/listPersonmonitor",
           method: "get",
           params: this.listQuery
+        }).then(data => {
+          this.listLoading = false;
+          this.list = data.list;
+          this.totalCount = data.totalCount;
+        })
+      },
+      conditionChange(val){
+        this.searchcondition.param=val;
+  console.log(val);
+       },
+      search(){
+          this.api({
+          url: "/personmonitor/queryPersonmonitor",
+          method: "get",
+          params: this.searchcondition
         }).then(data => {
           this.listLoading = false;
           this.list = data.list;
@@ -178,6 +198,7 @@ import XLSX from 'xlsx'
         //显示修改对话框
         //alert('还没写')
         this.tempPersonmonitor.id = this.list[$index].id;
+        this.tempPersonmonitor.id_no = this.list[$index].id_no;
         this.tempPersonmonitor.id_card = this.list[$index].id_card;
         this.tempPersonmonitor.sex = this.list[$index].sex;
         this.tempPersonmonitor.birthplace = this.list[$index].birthplace;
@@ -211,7 +232,7 @@ import XLSX from 'xlsx'
       },
       showDel(list){
         //删除
-        if (this.id_cardlist.length==0){
+        if (this.deletelist.length==0){
             this.$message({
             type: 'info',
             message: '请选中需要删除的人员!'
@@ -222,6 +243,13 @@ import XLSX from 'xlsx'
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+            this.api({
+                    url: "/personmonitor/deletePersonmonitor",
+                    method: "post",
+                    data: this.deletelist
+                    }).then(() => {
+                        this.getList();
+                  });
             this.$message({
             type: 'success',
             message: '删除成功!'
@@ -236,11 +264,8 @@ import XLSX from 'xlsx'
       },
       handleSelectionChange(val){
         console.log(val);
-        console.log(val[0].hasOwnProperty("姓名"));
-        console.log(val[0].hasOwnProperty("name"));
         for(var i=0;i<val.length;i++){
-          this.id_cardlist=val;
-          console.log(this.id_cardlist[i].id_card);
+          this.deletelist=val;
         }
       },
       readExcel(file) {

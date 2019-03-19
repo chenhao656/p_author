@@ -49,10 +49,26 @@ public class PersonMonitorController {
 	/**
 	 * 删除布控人员
 	 */
-//	@RequiresPermissions("personmonitor:update")
-//	@PostMapping("/updatePersonmonitor")
-//	public JSONObject updateArticle(@RequestBody JSONObject requestJson) {
-//		CommonUtil.hasAllRequired(requestJson, "id,id_card");
-//		return articleService.updateArticle(requestJson);
-//	}
+	@RequiresPermissions("personmonitor:delete")
+	@PostMapping("/deletePersonmonitor")
+	public JSONObject deletePersonmonitor(@RequestBody JSONArray requestJson) {
+		return personmonitorService.deletePersonmonitor(requestJson);
+	}
+	/**
+	 * 修改布控人员
+	 */
+	@RequiresPermissions("personmonitor:update")
+	@PostMapping("/updatepersonmonitor")
+	public JSONObject updatePersonmonitor(@RequestBody JSONObject requestJson) {
+		//CommonUtil.hasAllRequired(requestJson, "content");
+		return personmonitorService.updatePersonmonitor(requestJson);
+	}
+	/**
+	 * 条件布控人员详情
+	 */
+	@RequiresPermissions("personmonitor:list")
+	@GetMapping("/queryPersonmonitor")
+	public JSONObject queryPersonmonitor(HttpServletRequest request) {
+		return personmonitorService.queryPersonmonitor(CommonUtil.request2Json(request));
+	}
 }

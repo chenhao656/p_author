@@ -48,11 +48,37 @@ public class PersonmonitorServiceImpl implements PersonmonitorService {
 	public JSONObject bulkimportPersonmonitor(JSONArray requestJson) {
 		// TODO Auto-generated method stub
 		for(int i=0;i<requestJson.size();i++) {
-			personmonitorDao.addPersonmonitor(requestJson.getJSONObject(i));
+			int k=personmonitorDao.countPersonmonitor(requestJson.getJSONObject(i));
+			if(0==k) {
+			    personmonitorDao.addPersonmonitor(requestJson.getJSONObject(i));
+			}else {
+				personmonitorDao.updatePersonmonitor(requestJson.getJSONObject(i));
+			}
 		}
 		
 		return CommonUtil.successJson();
 	}
+	
+	@Override
+	public JSONObject updatePersonmonitor(JSONObject jsonObject) {
+		
+		personmonitorDao.updatePersonmonitorbyid(jsonObject);
+		return CommonUtil.successJson();
+	}
+	
+	@Override
+	public JSONObject deletePersonmonitor(JSONArray jsonObject) {
+		for(int i=0;i<jsonObject.size();i++) {
+			personmonitorDao.deletePersonmonitor(jsonObject.getJSONObject(i));
+		}
+		return CommonUtil.successJson();
+	}
 
+	
+	@Override
+	public JSONObject queryPersonmonitor(JSONObject jsonObject) {		
+		List<JSONObject> list = personmonitorDao.queryPersonmonitor(jsonObject);
+		return CommonUtil.successPage(list);
+	}
 
 }
