@@ -35,8 +35,9 @@ public class PersonmonitorServiceImpl implements PersonmonitorService {
 	@Override
 	public JSONObject listPersonmonitor(JSONObject jsonObject) {
 		CommonUtil.fillPageParam(jsonObject);
+		int count=personmonitorDao.countPersonmonitor(jsonObject);
 		List<JSONObject> list = personmonitorDao.listPersonmonitor(jsonObject);
-		return CommonUtil.successPage(jsonObject, list, 0);
+		return CommonUtil.successPage(jsonObject, list, count);
 	}
 
 	
@@ -48,7 +49,7 @@ public class PersonmonitorServiceImpl implements PersonmonitorService {
 	public JSONObject bulkimportPersonmonitor(JSONArray requestJson) {
 		// TODO Auto-generated method stub
 		for(int i=0;i<requestJson.size();i++) {
-			int k=personmonitorDao.countPersonmonitor(requestJson.getJSONObject(i));
+			int k=personmonitorDao.confirmPersonmonitor(requestJson.getJSONObject(i));
 			if(0==k) {
 			    personmonitorDao.addPersonmonitor(requestJson.getJSONObject(i));
 			}else {

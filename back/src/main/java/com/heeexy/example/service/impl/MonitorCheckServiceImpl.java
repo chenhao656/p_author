@@ -27,5 +27,25 @@ public class MonitorCheckServiceImpl implements MonitorCheckService{
 		List<JSONObject> list = monitorCheckDao.listMonitorCheck(jsonObject);
 		return CommonUtil.successPage(jsonObject, list, 0);
 	}
+	
+	
+	@Override
+	public JSONObject changeMonitor(JSONObject jsonObject) {
+		// TODO Auto-generated method stub
+		CommonUtil.fillPageParam(jsonObject);
+
+		monitorCheckDao.changeMonitor(jsonObject);
+		return CommonUtil.successJson();
+	}
+	
+	@Override
+	public JSONObject monitorEntry(JSONObject jsonObject) {
+		// TODO Auto-generated method stub
+		CommonUtil.fillPageParam(jsonObject);
+
+		List<JSONObject> list = monitorCheckDao.monitorEntry(jsonObject);
+		return CommonUtil.successPage(jsonObject, list, 0);
+	}
+
 
 }

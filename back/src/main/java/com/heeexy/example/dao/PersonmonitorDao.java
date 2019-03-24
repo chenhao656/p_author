@@ -40,4 +40,10 @@ public interface PersonmonitorDao {
 	 * 查询布控人员
 	 */
 	List<JSONObject> queryPersonmonitor(JSONObject jsonObject);
+	
+	/**
+	 * 确认布控人员是否存在
+	 */
+    int confirmPersonmonitor(JSONObject jsonObject);
+
 }

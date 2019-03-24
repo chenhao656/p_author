@@ -26,4 +26,21 @@ public class MonitorCheckController {
 	public JSONObject listPersonmonitor(HttpServletRequest request) {
 		return monitorCheckService.listMonitorCheck(CommonUtil.request2Json(request));
 	}
+	
+	/**
+	 *更新人员状态为已处理
+	 */
+	@PostMapping("/changeMonitor")
+	public JSONObject changeMonitor(HttpServletRequest request) {
+		return monitorCheckService.changeMonitor(CommonUtil.request2Json(request));
+	}
+	
+	
+	/**
+	 *更新人员状态为已处理
+	 */
+	@GetMapping("/monitorEntry")
+	public JSONObject monitorEntry(HttpServletRequest request) {
+		return monitorCheckService.monitorEntry(CommonUtil.request2Json(request));
+	}
 }

@@ -70,7 +70,7 @@
         </el-form-item>
         <el-form-item label="性别">
           <el-select v-model="tempPersonmonitor.sex" placeholder="请选择">
-            <el-option v-for="item in items" :label="item.name" :value="item.id"></el-option>
+            <el-option v-for="item in items" :label="item.name" :value="item.id" key="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="身份证号">
@@ -158,18 +158,21 @@ import XLSX from 'xlsx'
       },
       conditionChange(val){
         this.searchcondition.param=val;
-  console.log(val);
        },
       search(){
-          this.api({
-          url: "/personmonitor/queryPersonmonitor",
-          method: "get",
-          params: this.searchcondition
-        }).then(data => {
-          this.listLoading = false;
-          this.list = data.list;
-          this.totalCount = data.totalCount;
-        })
+        if(this.searchcondition.param!=''){
+              this.api({
+              url: "/personmonitor/queryPersonmonitor",
+              method: "get",
+              params: this.searchcondition
+                  }).then(data => {
+              this.listLoading = false;
+              this.list = data.list;
+              this.totalCount = data.totalCount;
+          })
+        }else{
+          this.getList();
+        }
       },
       hideRow(val){
         this.show=false

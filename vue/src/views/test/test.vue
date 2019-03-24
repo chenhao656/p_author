@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-<<<<<<< HEAD
     <h1>测试页面</h1>
     <el-alert title="警告提示的文案"
               type="warning">
@@ -65,7 +64,6 @@
     }
   }
 </script>
-=======
       <h1>页面样式还没定，监控黑名单人员进入</h1>
       <!-- <el-upload ref="upload" action="/wm/upload/":show-file-list="false":auto-upload="false"> -->
   <el-button slot="trigger" icon="el-icon-upload" size="middle" type="primary" @click="importfxx(this)">
@@ -185,4 +183,3 @@ export default {
 }
 
 </script>
->>>>>>> 62644bb1d4c09ac04c332bd38aca7baf3c1ce8e7

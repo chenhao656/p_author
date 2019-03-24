@@ -13,7 +13,7 @@
     <select id="countPersonmonitor" resultType="Integer">
         SELECT count(1)
         FROM p_person_control p
-        WHERE p.is_delete = '0' and id_card=#{id_card}
+        WHERE p.is_delete = '0'
     </select>
 
     <select id="listPersonmonitor" resultType="com.alibaba.fastjson.JSONObject">
@@ -21,6 +21,7 @@
         p.id_card id_card,p.birthplace birthplace,p.type type,
         p.case_type case_type FROM p_person_control p where p.is_delete=0
         ORDER BY ID ASC
+        LIMIT #{offSet}, #{pageRow}
     </select>
 
     <update id="updatePersonmonitor" parameterType="com.alibaba.fastjson.JSONObject">
@@ -41,7 +42,13 @@
     <select id="queryPersonmonitor" resultType="com.alibaba.fastjson.JSONObject" parameterType="java.lang.String">
         SELECT p.id id,p.id_no id_no,p.name name,p.sex sex,
         p.id_card id_card,p.birthplace birthplace,p.type type,
-        p.case_type case_type FROM p_person_control p where p.is_delete=0 and id_card=#{param} or name=#{param}
+        p.case_type case_type FROM p_person_control p where p.is_delete=0 and (id_card like concat('%',#{param},'%') or name like concat('%',#{param},'%'))
         ORDER BY ID ASC
+    </select>
+    
+    <select id="confirmPersonmonitor" resultType="Integer">
+        SELECT count(1)
+        FROM p_person_control p
+        WHERE p.is_delete = '0' and id_card=#{id_card}
     </select>
 </mapper>
