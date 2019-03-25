@@ -114,7 +114,7 @@ public class PersonMonitorController {
             HttpServletRequest request) {
             String path = request.getSession().getServletContext().getRealPath("/");
 
-            String targetFileName = personmonitorService.uploadSinglePhoto(file, uploadSpotPath,id_card);
+            String targetFileName = personmonitorService.uploadSpotPhoto(file, uploadSpotPath);
 
             Map fileMap = new HashMap();
             fileMap.put("uri", targetFileName);

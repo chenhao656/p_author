@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.CollectPointDao">
+
+    <select id="listCollectPoint" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT p.id id,p.point_name point_name,p.add_time add_time FROM p_point p where is_delete=0 order by p.add_time desc
+    </select>
+    
+    
+    <select id="listCollectPointSync" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT ps.id id,pp.point_name point_name,ps.edit_time edit_time,ps.is_deal is_deal,ps.deal_type deal_type FROM p_point pp,p_sync_task ps 
+        WHERE pp.id=ps.collect_point_id and ps.is_delete=0 and pp.is_delete=0
+        ORDER BY ps.add_time desc
+    </select>
+    
+    <update id="delCollectPoint" parameterType="com.alibaba.fastjson.JSONObject">
+         update p_point p set p.is_delete=1 where p.id=#{id} 
+    </update>
+    
+    <update id="delCollectPointSync" parameterType="com.alibaba.fastjson.JSONObject">
+         update p_sync_task p set p.is_delete=1, p.edit_time=now() where p.id=#{id} 
+    </update>    
+    
+    <insert id="addCollectPoint" parameterType="com.alibaba.fastjson.JSONObject">
+        INSERT INTO p_point
+            (point_name,add_time)
+        VALUES
+            (#{point_name},NOW())
+    </insert>
+    
+    <insert id="addCollectPointSync" parameterType="com.alibaba.fastjson.JSONObject">
+        INSERT INTO p_sync_task
+            (collect_point_id,deal_type,add_time,is_deal,is_delete)
+        VALUES
+            (#{point_id},#{deal_type},NOW(),0,0)
+    </insert>
+    
+    
+    <select id="getCollectPoint" parameterType="com.alibaba.fastjson.JSONObject" resultType="Integer">
+        SELECT count(1) from p_point where is_delete=0 and point_name=#{point_name}
+    </select>
+    
+    
+    <select id="getCollectPointid" parameterType="com.alibaba.fastjson.JSONObject" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT id from p_point where is_delete=0
+    </select>
+</mapper>

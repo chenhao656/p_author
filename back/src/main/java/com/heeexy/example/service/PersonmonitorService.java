@@ -43,4 +43,8 @@ public interface PersonmonitorService {
 	 * 单张照片上传
 	 */
 	String uploadSinglePhoto(MultipartFile file,String path,String id_card);
+	/**
+	 * 现场照片上传
+	 */
+	String uploadSpotPhoto(MultipartFile file,String path);
 }

@@ -27,29 +27,22 @@ export default new Router({
   routes: constantRouterMap
 })
 export const asyncRouterMap = [
-   {
-     path: '/system',
-     component: Layout,
-     redirect: '/system/article',
-     name: '功能模块',
-     meta: {title: '功能模块', icon: 'tree'},
-     children: [
-       {
-         path: 'article',
-         name: '文章',
-         component: _import('article/article'),
-         meta: {title: '文章', icon: 'example'},
-         menu: 'article'
-       },      
-       {
-         path: 'monitor',
-         name: '布控监测',
-         component: _import('monitor/monitor'),
-         meta: {title: '布控监测', icon: 'example'},
-         menu: 'monitor'
-       },
-     ]
-   },
+   //{
+   //  path: '/system',
+   //  component: Layout,
+   //  redirect: '/system/article',
+   //  name: '功能模块',
+   //  meta: {title: '功能模块', icon: 'tree'},
+   //  children: [
+   //    {
+   //      path: 'article',
+   //      name: '文章',
+   //      component: _import('article/article'),
+   //      meta: {title: '文章', icon: 'example'},
+   //      menu: 'article'
+   //    },
+   //  ]
+   //},
   {
     path: '/user',
     component: Layout,
@@ -60,13 +53,13 @@ export const asyncRouterMap = [
       {
         path: '', name: '用户管理', component: _import('user/user'), meta: {title: '用户管理', icon: 'user'}, menu: 'user'
       },
-      {
-        path: 'organization',
-        name: '单位管理',
-        //component: _import('user/role'),
-        meta: {title: '单位管理', icon: 'example'},
-        //menu: 'role'
-      },
+      //{
+      //  path: 'organization',
+      //  name: '单位管理',
+      //  //component: _import('user/role'),
+      //  meta: {title: '单位管理', icon: 'example'},
+      //  //menu: 'role'
+      //},
       // {
       //   path: 'role',
       //   name: '权限管理',
@@ -76,29 +69,29 @@ export const asyncRouterMap = [
       // },
     ]
   },
-  {
-    path: '/person',
-    component: Layout,
-    redirect: '/person/',
-    name: '',
-    meta: {title: '人口信息管理', icon: 'table'},
-    children: [      
-      {
-      path: 'p_query',
-      name: '人口信息查询',
-      //component: _import('user/role'),
-      meta: {title: '人口信息查询', icon: 'example'},
-      //menu: 'role'
-      },      
-      {
-        path: 'p_task',
-        name: '人像查询任务',
-        //component: _import('user/role'),
-        meta: {title: '人像查询任务', icon: 'example'},
-        //menu: 'role'
-      },
-  ]
-  },
+  //{
+  //  path: '/person',
+  //  component: Layout,
+  //  redirect: '/person/',
+  //  name: '',
+  //  meta: {title: '人口信息管理', icon: 'table'},
+  //  children: [      
+  //    {
+  //    path: 'p_query',
+  //    name: '人口信息查询',
+  //    //component: _import('user/role'),
+  //    meta: {title: '人口信息查询', icon: 'example'},
+  //    //menu: 'role'
+  //    },      
+  //    {
+  //      path: 'p_task',
+  //      name: '人像查询任务',
+  //      //component: _import('user/role'),
+  //      meta: {title: '人像查询任务', icon: 'example'},
+  //      //menu: 'role'
+  //    },
+  //]
+  //},
   {
     path: '/control',
     component: Layout,
@@ -130,68 +123,68 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/collect',
+    path: '/point',
     component: Layout,
-    redirect: '/collect/',
+    redirect: '/point/',
     name: '',
     meta: {title: '采集点管理', icon: 'table'},
     children: [      
       {
       path: 'collect_manager',
       name: '采集点管理',
-      //component: _import('user/role'),
+      component: _import('point/point'),
       meta: {title: '采集点管理', icon: 'example'},
-      //menu: 'role'
+      menu: 'point'
       }
     ]
   },
-  {
-    path: '/statistics',
-    component: Layout,
-    redirect: '/statistics/',
-    name: '',
-    meta: {title: '数据统计', icon: 'table'},
-    children: [      
-      {
-      path: 'data_statistics',
-      name: '数据统计',
-      //component: _import('user/role'),
-      meta: {title: '数据统计', icon: 'example'},
-      //menu: 'role'
-      }
-    ]
-  },
-  {
-    path: '/log',
-    component: Layout,
-    redirect: '/log/',
-    name: '',
-    meta: {title: '系统日志', icon: 'table'},
-    children: [      
-      {
-      path: 'log_query',
-      name: '日志查询',
-      //component: _import('user/role'),
-      meta: {title: '日志查询', icon: 'example'},
-      //menu: 'role'
-      }
-    ]
-  },  
-  {
-    path: '/test',
-    component: Layout,
-    redirect: '/test/',
-    name: '',
-    meta: {title: '测试页面', icon: 'table'},
-    children: [      
-      {
-      path: 'test',
-      name: '测试页面',
-      component: _import('test/test'),
-      meta: {title: '测试页面', icon: 'example'},
-      //menu: 'role'
-      }
-    ]
-  },
+  //{
+  //  path: '/statistics',
+  //  component: Layout,
+  //  redirect: '/statistics/',
+  //  name: '',
+  //  meta: {title: '数据统计', icon: 'table'},
+  //  children: [      
+  //    {
+  //    path: 'data_statistics',
+  //    name: '数据统计',
+  //    //component: _import('user/role'),
+  //    meta: {title: '数据统计', icon: 'example'},
+  //    //menu: 'role'
+  //    }
+  //  ]
+  //},
+  //{
+  //  path: '/log',
+  //  component: Layout,
+  //  redirect: '/log/',
+  //  name: '',
+  //  meta: {title: '系统日志', icon: 'table'},
+  //  children: [      
+  //    {
+  //    path: 'log_query',
+  //    name: '日志查询',
+  //    //component: _import('user/role'),
+  //    meta: {title: '日志查询', icon: 'example'},
+  //    //menu: 'role'
+  //    }
+  //  ]
+  //},  
+  //{
+  //  path: '/test',
+  //  component: Layout,
+  //  redirect: '/test/',
+  //  name: '',
+  //  meta: {title: '测试页面', icon: 'table'},
+  //  children: [      
+  //    {
+  //    path: 'test',
+  //    name: '测试页面',
+  //    component: _import('test/test'),
+  //    meta: {title: '测试页面', icon: 'example'},
+  //    //menu: 'role'
+  //    }
+  //  ]
+  //},
   {path: '*', redirect: '/404', hidden: true}
 ]

@@ -6,7 +6,6 @@ import com.heeexy.example.dao.PersonmonitorDao;
 import com.heeexy.example.service.PersonmonitorService;
 import com.heeexy.example.util.CommonUtil;
 
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 //import org.springframework.transaction.annotation.Transactional;
@@ -141,6 +140,34 @@ public class PersonmonitorServiceImpl implements PersonmonitorService {
         js.put("id_card", id_card);
         js.put("stock_path",stock_path);
         personmonitorDao.updateStockphoto(js);
+        
+        return targetFile.getName();
+	}
+
+	@Override
+	public String uploadSpotPhoto(MultipartFile file, String path) {
+		String fileName = file.getOriginalFilename();
+		
+		File fileDir = new File(path);
+        if (!fileDir.exists()) {
+            fileDir.setWritable(true);
+            fileDir.mkdirs();
+        }
+        
+        File targetFile = new File(path, fileName);
+
+        try {
+            file.transferTo(targetFile);
+
+        } catch (IOException e) {
+            //logger.error("上传文件异常", e);
+            return null;
+        }
+        String spot_path=path.substring(path.indexOf("static")-1, path.length())+"\\"+fileName;
+        JSONObject js=new JSONObject();
+        js.put("id_card", fileName.substring(0,fileName.indexOf(".")));
+        js.put("spot_path",spot_path);
+        personmonitorDao.updateSpotphoto(js);
         
         return targetFile.getName();
 	}

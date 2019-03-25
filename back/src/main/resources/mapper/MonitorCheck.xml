@@ -5,18 +5,18 @@
 
     <select id="listMonitorCheck" resultType="com.alibaba.fastjson.JSONObject">
         SELECT pi.id id,pc.name name,pc.sex sex,
-        pc.id_card id_card,pc.birthplace birthplace,pc.type type,pc.case_type case_type,pi.photo_url spot_photo,pc.photo_url stock_photo,pi.is_deal FROM p_person_control pc ,p_person_spot_info pi
-        WHERE pc.id_card=pi.id_card and pc.is_delete=0 order by is_deal asc
+        pc.id_card id_card,pc.birthplace birthplace,pc.type type,pc.case_type case_type,pi.photo_url spot_photo,pc.photo_url stock_photo,pi.is_deal is_deal,pi.collect_point collect_point FROM p_person_control pc ,p_person_spot_info pi
+        WHERE pc.id_card=pi.id_card and pc.is_delete=0 order by pi.is_deal asc, pi.edit_time desc
     </select>
     
     <update id="changeMonitor" parameterType="com.alibaba.fastjson.JSONObject">
-         update p_person_spot_info p set p.is_deal=1 where p.id=#{id} p.edit_time=now()
+         update p_person_spot_info p set p.is_deal=1, p.edit_time=now() where p.id=#{id} 
     </update>
     
     
     <select id="monitorEntry" resultType="com.alibaba.fastjson.JSONObject">
         SELECT pi.id id,pc.name name,pc.sex sex,
-        pc.id_card id_card,pc.birthplace birthplace,pc.type type,pc.case_type case_type,pi.photo_url spot_photo,pc.photo_url stock_photo,pi.is_deal FROM p_person_control pc ,p_person_spot_info pi
+        pc.id_card id_card,pc.birthplace birthplace,pc.type type,pc.case_type case_type,pi.photo_url spot_photo,pc.photo_url stock_photo,pi.is_deal is_deal,pi.collect_point collect_point FROM p_person_control pc ,p_person_spot_info pi
         WHERE pc.id_card=pi.id_card and pc.is_delete=0 and pi.is_deal=0 order by pi.is_deal asc, pi.edit_time desc
     </select>
 </mapper>

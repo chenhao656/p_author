@@ -59,6 +59,6 @@
     
     
     <update id="updateSpotphoto" parameterType="com.alibaba.fastjson.JSONObject">
-         update p_person_spot_info p set p.photo_url=#{spot_path} where p.id_card=#{id_card} is_deal=0
+         update p_person_spot_info p set p.photo_url=#{spot_path} where p.id_card=#{id_card} and is_deal=0
     </update>   
 </mapper>

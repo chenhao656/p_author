@@ -1,0 +1,3 @@
+monitor.py 实时监控文件夹，若有布控人员进入扫描入库告警
+clearFile.py 定时清理图片文件
+syncBlackList.py 同步布控人员到机器

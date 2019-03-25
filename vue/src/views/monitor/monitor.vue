@@ -33,6 +33,7 @@
       <el-table-column align="center" prop="birthplace" label="户籍地" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="type" label="人员类别" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="case_type" label="案件类别" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" prop="collect_point" label="采集点" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="spot_photo" label="现场照片" style="width: 60px;">
         <template slot-scope="scope">
           <img v-bind:src="scope.row.spot_photo" min-width="70" height="70" />
@@ -80,6 +81,7 @@
           case_type: "",
           spot_photo: "",
           stock_photo: "",
+          collect_point:"",
           is_deal:""
         }
       };
