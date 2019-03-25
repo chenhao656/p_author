@@ -89,7 +89,7 @@
         </el-form-item>
         <el-form-item label="性别">
           <el-select v-model="tempPersonmonitor.sex" placeholder="请选择">
-            <el-option v-for="item in items" :label="item.name" :value="item.name" keys="item.id"></el-option>
+            <el-option v-for="item in items" :label="item.name" :value="item.name" :key="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="身份证号">
