@@ -8,17 +8,17 @@ import configparser
 import shutil
 
 class SyncBlackList():
-    def getConfig(section, key):
+    def getConfig(self,section, key):
         config = configparser.ConfigParser()
         path = os.path.split(os.path.realpath(__file__))[0] + '/config.ini'
         config.read(path, 'UTF-8')
         return config.get(section, key)
 
-    def syncBlackFile():
-        bakupdir = SyncBlackList.getConfig('PATH', 'FaceVerifyPath') + '\\bak'
-        blackdir = SyncBlackList.getConfig('PATH', 'FaceVerifyPath') + '\\List'
+    def syncBlackFile(self):
+        bakupdir = SyncBlackList.getConfig(self,'PATH', 'FaceVerifyPath') + '\\bak'
+        blackdir = SyncBlackList.getConfig(self,'PATH', 'FaceVerifyPath') + '\\List'
         connect = pymysql.Connect(
-            host=SyncBlackList.getConfig('DATABASE', 'host'),
+            host=SyncBlackList.getConfig(self,'DATABASE', 'host'),
             port=3306,
             user='p_author',
             passwd='!pfxx123',
@@ -29,7 +29,7 @@ class SyncBlackList():
         cursor1 = connect.cursor()
         cursor2 = connect.cursor()
         qury_sql = "select ps.deal_type,ps.id from p_sync_task ps,p_point pp where ps.collect_point_id=pp.id and pp.is_delete=0 and ps.is_delete=0 and ps.is_deal=0 and pp.point_name='%s'"
-        cursor1.execute(qury_sql % SyncBlackList.getConfig('POINT','point'))
+        cursor1.execute(qury_sql % SyncBlackList.getConfig(self,'POINT','point'))
         for row in cursor1.fetchall():
             oldfile = os.path.join(blackdir, "BlackList.txt")
             bakupfile=os.path.join(bakupdir,"BlackList.txt")
@@ -61,5 +61,6 @@ class SyncBlackList():
 
 if __name__ == "__main__":
     while True:
-        SyncBlackList.syncBlackFile()
+        syncBlackList=SyncBlackList()
+        syncBlackList.syncBlackFile()
         time.sleep(600)
