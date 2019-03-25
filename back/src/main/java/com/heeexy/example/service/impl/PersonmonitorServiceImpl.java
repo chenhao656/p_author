@@ -6,10 +6,15 @@ import com.heeexy.example.dao.PersonmonitorDao;
 import com.heeexy.example.service.PersonmonitorService;
 import com.heeexy.example.util.CommonUtil;
 
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 //import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -80,6 +85,64 @@ public class PersonmonitorServiceImpl implements PersonmonitorService {
 	public JSONObject queryPersonmonitor(JSONObject jsonObject) {		
 		List<JSONObject> list = personmonitorDao.queryPersonmonitor(jsonObject);
 		return CommonUtil.successPage(list);
+	}
+
+	@Override
+	public String uploadPhoto(MultipartFile file, String path) {
+		String fileName = file.getOriginalFilename();
+        //String fileExtensionName = fileName.substring(fileName.lastIndexOf(".") + 1);
+        //String uploadFileName = UUID.randomUUID().toString() + "." + fileExtensionName;
+        //logger.info("开始上传文件，上传的文件名是: {}，上传的路径是: {}，新文件名：{}", fileName, path, uploadFileName);
+
+        File fileDir = new File(path);
+        if (!fileDir.exists()) {
+            fileDir.setWritable(true);
+            fileDir.mkdirs();
+        }
+        
+        File targetFile = new File(path, fileName);
+
+        try {
+            file.transferTo(targetFile);
+
+        } catch (IOException e) {
+            //logger.error("上传文件异常", e);
+            return null;
+        }
+        JSONObject js=new JSONObject();
+        String stock_path=path.substring(path.indexOf("static")-1, path.length())+"\\"+fileName;
+        js.put("id_card", fileName.substring(0, fileName.indexOf(".")));
+        js.put("stock_path",stock_path);
+        personmonitorDao.updateStockphoto(js);
+        return targetFile.getName();
+	}
+
+	@Override
+	public String uploadSinglePhoto(MultipartFile file, String path,String id_card) {
+		String fileName = file.getOriginalFilename();
+		
+		File fileDir = new File(path);
+        if (!fileDir.exists()) {
+            fileDir.setWritable(true);
+            fileDir.mkdirs();
+        }
+        
+        File targetFile = new File(path, fileName);
+
+        try {
+            file.transferTo(targetFile);
+
+        } catch (IOException e) {
+            //logger.error("上传文件异常", e);
+            return null;
+        }
+        String stock_path=path.substring(path.indexOf("static")-1, path.length())+"\\"+fileName;
+        JSONObject js=new JSONObject();
+        js.put("id_card", id_card);
+        js.put("stock_path",stock_path);
+        personmonitorDao.updateStockphoto(js);
+        
+        return targetFile.getName();
 	}
 
 }

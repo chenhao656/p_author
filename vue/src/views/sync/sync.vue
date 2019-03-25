@@ -16,7 +16,7 @@
           </template>
         </el-table-column>
         <el-table-column align="center" prop="name" label="采集点名称" style="width: 60px;"></el-table-column>
-        <el-table-column align="center" prop="sex" label="同步时间" style="width: 30px;"></el-table-column>
+        <el-table-column align="center" prop="sex" label="同步完成时间" style="width: 30px;"></el-table-column>
         <el-table-column align="center" prop="id_card" label="同步状态" style="width: 200px;"></el-table-column>
       </el-table>
     </div>

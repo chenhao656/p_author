@@ -1,5 +1,7 @@
 package com.heeexy.example.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -32,4 +34,13 @@ public interface PersonmonitorService {
 	 */
 	JSONObject queryPersonmonitor(JSONObject jsonObject);
 	
+	/**
+	 * 上传照片
+	 */
+	String uploadPhoto(MultipartFile file,String path);
+	
+	/**
+	 * 单张照片上传
+	 */
+	String uploadSinglePhoto(MultipartFile file,String path,String id_card);
 }

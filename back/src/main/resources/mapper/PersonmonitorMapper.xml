@@ -19,7 +19,7 @@
     <select id="listPersonmonitor" resultType="com.alibaba.fastjson.JSONObject">
         SELECT p.id id,p.id_no id_no,p.name name,p.sex sex,
         p.id_card id_card,p.birthplace birthplace,p.type type,
-        p.case_type case_type FROM p_person_control p where p.is_delete=0
+        p.case_type case_type,p.photo_url stock_photo FROM p_person_control p where p.is_delete=0
         ORDER BY ID ASC
         LIMIT #{offSet}, #{pageRow}
     </select>
@@ -31,7 +31,7 @@
 
 
     <update id="updatePersonmonitorbyid" parameterType="com.alibaba.fastjson.JSONObject">
-         update p_person_control p set p.name=#{name},p.id_no=#{id_no},p.sex=#{sex},p.birthplace=#{birthplace},p.id_card=#{id_card}
+         update p_person_control p set p.name=#{name},p.id_no=#{id_no},p.sex=#{sex},p.birthplace=#{birthplace},p.id_card=#{id_card},
          p.type=#{type},p.case_type=#{case_type} where p.id=#{id}
     </update>
     
@@ -42,7 +42,7 @@
     <select id="queryPersonmonitor" resultType="com.alibaba.fastjson.JSONObject" parameterType="java.lang.String">
         SELECT p.id id,p.id_no id_no,p.name name,p.sex sex,
         p.id_card id_card,p.birthplace birthplace,p.type type,
-        p.case_type case_type FROM p_person_control p where p.is_delete=0 and (id_card like concat('%',#{param},'%') or name like concat('%',#{param},'%'))
+        p.case_type case_type,p.photo_url stock_photo FROM p_person_control p where p.is_delete=0 and (id_card like concat('%',#{param},'%') or name like concat('%',#{param},'%'))
         ORDER BY ID ASC
     </select>
     
@@ -51,4 +51,14 @@
         FROM p_person_control p
         WHERE p.is_delete = '0' and id_card=#{id_card}
     </select>
+    
+    
+    <update id="updateStockphoto" parameterType="com.alibaba.fastjson.JSONObject">
+         update p_person_control p set p.photo_url=#{stock_path} where p.id_card=#{id_card} and is_delete=0
+    </update>   
+    
+    
+    <update id="updateSpotphoto" parameterType="com.alibaba.fastjson.JSONObject">
+         update p_person_spot_info p set p.photo_url=#{spot_path} where p.id_card=#{id_card} is_deal=0
+    </update>   
 </mapper>

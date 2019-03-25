@@ -45,5 +45,15 @@ public interface PersonmonitorDao {
 	 * 确认布控人员是否存在
 	 */
     int confirmPersonmonitor(JSONObject jsonObject);
+    
+	/**
+	 * 更新库存照片信息
+	 */	
+    int updateStockphoto(JSONObject jsonObject);
+    
+	/**
+	 * 导入现场照片信息
+	 */	
+    int updateSpotphoto(JSONObject jsonObject);
 
 }

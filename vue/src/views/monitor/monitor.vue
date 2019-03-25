@@ -63,6 +63,7 @@
           name: ''
         },
         list: [],//表格的数据
+        monitorlist:[],
         listLoading: false,//数据加载等待动画
         timer: '',
         monitoropen: false,
@@ -102,13 +103,10 @@
       switchmonitor(val) {
         this.monitoropen = val;
         if (val) {
-          this.timer = setInterval(this.testmonitor, 1000);
+          this.timer = setInterval(this.monitorBlackList, 2000);
         } else {
           clearInterval(this.timer);
         }
-      },
-      testmonitor() {
-        console.log(123);
       },
       monitorBlackList() {
         //获取列表
@@ -119,19 +117,15 @@
           params: this.listQuery
         }).then(data => {
           this.listLoading = false;
-          this.list = data.list;
-          this.totalCount = data.totalCount;
-          if (data.list == false) {
-            //console.log(this.list[0].name)
-          } else {
-            var voice = new Audio('http://www.xmf119.cn/static/admin/sounds/notify.wav')
+          this.monitorlist = data.list;
+          //this.totalCount = data.totalCount;
+          console.log(this.monitorlist.length);
+          if (this.monitorlist.length > 0) {
+            this.getList();
+            var voice = new Audio('/static/warning.wav')
             voice.play()
-            voice.addEventListener('end', function () {
-              alert('监控人员' + this.list[0].name + '进入')
-            }
-            )
-            alert('监控人员' + this.list[0].name + '进入')
-          }
+            this.showwarning = true;
+          } 
         })
         //this.value ++;
 
@@ -167,7 +161,7 @@
           params: this.monitorPerson
         }).then(data => {
           this.listLoading = false;
-
+          this.showwarning = false;
           this.getList();
         })
       }

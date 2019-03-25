@@ -3,31 +3,37 @@
     <div class="filter-container">
       <el-form>
         <el-form-item>
-          <el-input  v_model="this.searchcondition.param"  placeholder="身份证号或姓名" style="width: 200px;" size="small"  @change="conditionChange"></el-input><el-button type="primary" icon="el-icon-search" size="small" @click="search">搜索</el-button>
-          <el-button type="primary" icon="plus" @click="showCreate" v-if="hasPerm('personmonitor:add')" size="small">添加布控人员
+          <el-input v_model="this.searchcondition.param" placeholder="身份证号或姓名" style="width: 200px;" size="small" @change="conditionChange"></el-input><el-button type="primary" icon="el-icon-search" size="small" @click="search">搜索</el-button>
+          <el-button type="primary" icon="plus" @click="showCreate" v-if="hasPerm('personmonitor:add')" size="small">
+            添加布控人员
           </el-button>
           <el-button type="danger" icon="edit" @click="showDel(deletelist)" size="small">删除</el-button>
-          <el-upload
-              ref="upload"
-              action="/wm/upload/"
-              :show-file-list="false"
-              :on-change="readExcel"
-              :auto-upload="false">
-            <el-button
-              slot="trigger"
-              icon="el-icon-upload"
-              size="small"
-              type="primary">
-              批量上传
+          <el-upload ref="upload"
+                     action="/wm/upload/"
+                     :show-file-list="false"
+                     :on-change="readExcel"
+                     :auto-upload="false">
+            <el-button slot="trigger"
+                       icon="el-icon-upload"
+                       size="small"
+                       type="primary">
+              批量录入人员信息
             </el-button>
-          </el-upload>          
-
+          </el-upload>
+          <el-upload class="upload-demo"
+                     action="/api/personmonitor/uploadphoto"
+                     multiple
+                     :on-success="getList"
+                     :show-file-list="false">
+            <el-button size="small" type="primary">批量上传照片</el-button>
+            <div slot="tip" class="el-upload__tip">图片以身份证号命名，只能上传jpg/png文件，单张图片最大10Mb</div>
+          </el-upload>
         </el-form-item>
       </el-form>
     </div>
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
-              highlight-current-row  @selection-change="handleSelectionChange">
-    <el-table-column type="selection" width="55"s></el-table-column>
+              highlight-current-row @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" s></el-table-column>
       <el-table-column align="center" label="序号" width="80">
         <template slot-scope="scope">
           <span v-text="getIndex(scope.$index)"> </span>
@@ -41,10 +47,23 @@
       <el-table-column align="center" prop="birthplace" label="户籍地" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="type" label="人员类别" style="width: 60px;"></el-table-column>
       <el-table-column align="center" prop="case_type" label="案件类别" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" prop="stock_photo" label="照片" style="width: 60px;">
+        <template slot-scope="scope">
+          <img v-bind:src="scope.row.stock_photo" min-width="70" height="70" />
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="操作" width="200" v-if="hasPerm('personmonitor:update')">
         <template slot-scope="scope">
-          <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
+          <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)" size="small">修改</el-button>
           <!-- <el-button type="danger" icon="edit" @click="showDel(scope.$index)">删除</el-button> -->
+          <el-upload class="upload-demo"
+                     action="/api/personmonitor/singleuploadphoto"
+                     :show-file-list="false"
+                     :auto-upload="true"
+                     :on-success="getList"
+                     :data="uploadParam">
+            <el-button size="small" type="primary" @click="choseCurrent(scope.$index)">上传照片</el-button>
+          </el-upload>
         </template>
       </el-table-column>
     </el-table>
@@ -112,6 +131,9 @@ import XLSX from 'xlsx'
           pageRow: 50,//每页条数
           name: ''
         },
+        uploadParam:{
+          id_card:""
+        },
         deletelist:[],//选中的身份证号数据
         dialogStatus: 'create',
         dialogFormVisible: false,
@@ -127,7 +149,8 @@ import XLSX from 'xlsx'
           id_card:"",
           birthplace:"",
           type:"",
-          case_type:""
+          case_type:"",
+          stock_photo:""
         },
         items:[{name:"男",id:'1'},{name:"女",id:'2'}],
         searchcondition:{
@@ -360,6 +383,29 @@ import XLSX from 'xlsx'
          }
       };
         fileReader.readAsBinaryString(file.raw);
+      },
+      choseCurrent($index){
+         this.uploadParam.id_card=this.list[$index].id_card;
+      },
+      uploadsingle(file){
+           console.log(file);
+           var oldfilename=file.name;
+           var newfilename=this.uploadfilename+oldfilename.substring(oldfilename.indexof('.'),oldfilename.length);
+           file.name=newfilename;
+           var reader = new filereader();
+           var fd = new formdata();
+           fd.append('file', file);
+           this.api({
+               url: "/personmonitor/uploadphoto",
+               method: "post",
+               data: fd,
+               headers:{
+						       'content-type':'multipart/form-data'
+				          	}
+                }).then(() => {
+                  this.getlist();
+                  this.dialogformvisible = false
+            })
       }
     }
   }

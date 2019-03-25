@@ -3,5 +3,9 @@ spring:
       url: jdbc:mysql://rm-bp12uie49m8m0v2w1no.mysql.rds.aliyuncs.com:3306/p_author?useUnicode=true&autoReconnect=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       username: p_author
       password: '!pfxx123'
+  servlet:
+    multipart:
+      maxFileSize: "10MB"
+      maxRequestSize: "50MB"
 mybatis:
    mapperLocations: classpath:/mapper/*.xml

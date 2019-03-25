@@ -7,6 +7,10 @@ import com.heeexy.example.util.CommonUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,6 +21,9 @@ public class PersonMonitorController {
 
 	@Autowired
 	private PersonmonitorService personmonitorService;
+	
+	private static String uploadSpotPath="D:\\vue_demo\\p_author\\vue\\static\\images\\spot";
+	private static String uploadStockPath="D:\\vue_demo\\p_author\\vue\\static\\images\\stock";
 
 	/**
 	 * 查询布控人员详情
@@ -71,4 +78,46 @@ public class PersonMonitorController {
 	public JSONObject queryPersonmonitor(HttpServletRequest request) {
 		return personmonitorService.queryPersonmonitor(CommonUtil.request2Json(request));
 	}
+	
+	@PostMapping("/uploadphoto")
+    public Map upload(@RequestParam(value = "file", required = false) MultipartFile file,
+            String name,
+            HttpServletRequest request) {
+            String path = request.getSession().getServletContext().getRealPath("upload");
+            String targetFileName = personmonitorService.uploadPhoto(file, uploadStockPath);
+
+            Map fileMap = new HashMap();
+            fileMap.put("uri", targetFileName);
+            return fileMap;
+     }
+	
+	
+	@PostMapping("/singleuploadphoto")
+    public Map singleupload(@RequestParam(value = "file", required = false) MultipartFile file,
+    		@RequestParam(value = "id_card", required = false) String id_card,
+            HttpServletRequest request) {
+            String path = request.getSession().getServletContext().getRealPath("/");
+
+            String targetFileName = personmonitorService.uploadSinglePhoto(file, uploadStockPath,id_card);
+
+            Map fileMap = new HashMap();
+            fileMap.put("uri", targetFileName);
+            return fileMap;
+     }
+
+	/**
+	 * 开放给python客户端传输图片
+	 */	
+	@PostMapping("/uploadspotphoto")
+    public Map uploadSpotPhoto(@RequestParam(value = "file", required = false) MultipartFile file,
+    		@RequestParam(value = "id_card", required = false) String id_card,
+            HttpServletRequest request) {
+            String path = request.getSession().getServletContext().getRealPath("/");
+
+            String targetFileName = personmonitorService.uploadSinglePhoto(file, uploadSpotPath,id_card);
+
+            Map fileMap = new HashMap();
+            fileMap.put("uri", targetFileName);
+            return fileMap;
+     }
 }
