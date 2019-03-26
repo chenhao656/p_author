@@ -64,6 +64,9 @@ class FileEventHandler(FileSystemEventHandler):
                         if(os.path.exists(post_dir)):
                             post_data = {'file': open(post_dir, 'rb')}
                             requests.post(FileEventHandler.getConfig(self,'POSTURL','url'), files=post_data)
+                    bakupfile=os.path.join(bakupdir,filename)
+                    if(os.path.exists(bakupfile)):
+                        os.rename(bakupfile, bakupfile + str(time.time()))
                     shutil.move(os.path.join(parent, filename), bakupdir)
                 cursor.close()
                 connect.close()

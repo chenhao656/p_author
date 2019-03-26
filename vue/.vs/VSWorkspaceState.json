@@ -2,17 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\src",
+    "\\src\\api",
     "\\src\\router",
     "\\src\\views",
     "\\src\\views\\article",
     "\\src\\views\\login",
     "\\src\\views\\monitor",
     "\\src\\views\\personmonitor",
-    "\\src\\views\\point",
-    "\\src\\views\\sync",
-    "\\src\\views\\test",
     "\\src\\views\\user"
   ],
-  "SelectedNode": "\\src\\views\\personmonitor\\personmonitor.vue",
+  "SelectedNode": "\\src\\views\\login\\index.vue",
   "PreviewInSolutionExplorer": false
 }
